@@ -8,7 +8,7 @@ const Screen = () => {
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState('https://i.ibb.co/7kvPXdT/xe-dap-2.jpg');
     const [type, setType] = useState('Roadbike');
     const [selectedType, setSelectedType] = useState('ALL');
 
@@ -28,16 +28,25 @@ const Screen = () => {
         setType('Roadbike');
     };
 
-
     const filteredBikes = selectedType === 'ALL'
         ? bikes
         : bikes.filter((bike) => bike.type === selectedType);
 
+
+    const getButtonStyle = (type) => {
+        return [
+            styles.btnType,
+            selectedType === type && styles.btnTypeActive, 
+        ];
+    };
+
     return (
         <ScrollView>
-            <Text style={{ fontSize: 20, fontWeight: "600", color: "red", marginBottom: 20 }}>THE WORLD BEST BIKE</Text>
+            <Text style={{ fontSize: 20, fontWeight: "600", color: "red", marginBottom: 20 }}>THE WORLD BEST BIKE </Text>
+            <Text style={{ fontSize: 20, fontWeight: "600", color: "red", marginBottom: 20 }}>NGUYEN VAN PHONG </Text>
 
-            <View>
+            <View style={styles.boxAdd}>
+            <Text style={{ fontSize: 15, fontWeight: "600", color: "black", marginBottom: 20 , textAlign:"center"}}>ADD BIKE</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter bike name"
@@ -79,19 +88,19 @@ const Screen = () => {
             <View>
                 <View style={styles.lineType}>
                     <TouchableOpacity
-                        style={styles.btnType}
+                        style={getButtonStyle('ALL')}
                         onPress={() => setSelectedType('ALL')}
                     >
                         <Text>ALL</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.btnType}
+                        style={getButtonStyle('Roadbike')}
                         onPress={() => setSelectedType('Roadbike')}
                     >
                         <Text>Roadbike</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.btnType}
+                        style={getButtonStyle("Mountain")}
                         onPress={() => setSelectedType('Mountain')}
                     >
                         <Text>Mountain</Text>
@@ -125,6 +134,19 @@ const Screen = () => {
 export default Screen
 
 const styles = StyleSheet.create({
+    boxAdd:{
+        padding:10,
+        borderWidth:1
+    },
+    input:{
+        height:45,
+        borderWidth:1,
+        borderRadius:5,
+        margin:5,
+        paddingLeft:10
+    },
+
+
     lineType: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -154,5 +176,8 @@ const styles = StyleSheet.create({
     wImg: {
         width: "100%",
         height: 100
+    },
+    btnTypeActive: {
+        backgroundColor: "red"
     }
 })
