@@ -10,6 +10,7 @@ const Screen = () => {
     const [price, setPrice] = useState('');
     const [image, setImage] = useState('');
     const [type, setType] = useState('Roadbike');
+    const [selectedType, setSelectedType] = useState('ALL');
 
     const dispatch = useDispatch();
     const { bikes, loading } = useSelector((state) => state.bike);
@@ -26,6 +27,11 @@ const Screen = () => {
         setImage('');
         setType('Roadbike');
     };
+
+
+    const filteredBikes = selectedType === 'ALL'
+        ? bikes
+        : bikes.filter((bike) => bike.type === selectedType);
 
     return (
         <ScrollView>
@@ -72,13 +78,22 @@ const Screen = () => {
 
             <View>
                 <View style={styles.lineType}>
-                    <TouchableOpacity style={styles.btnType}>
+                    <TouchableOpacity
+                        style={styles.btnType}
+                        onPress={() => setSelectedType('ALL')}
+                    >
                         <Text>ALL</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnType}>
+                    <TouchableOpacity
+                        style={styles.btnType}
+                        onPress={() => setSelectedType('Roadbike')}
+                    >
                         <Text>Roadbike</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnType}>
+                    <TouchableOpacity
+                        style={styles.btnType}
+                        onPress={() => setSelectedType('Mountain')}
+                    >
                         <Text>Mountain</Text>
                     </TouchableOpacity>
                 </View>
@@ -89,11 +104,10 @@ const Screen = () => {
                         <Text>loading...</Text>
                     ) : (
                         <View style={styles.lineItem}>
-                            {bikes.map((item) => (
+                            {filteredBikes.map((item) => (
                                 <View key={item.id} style={styles.item}>
                                     <Image source={{ uri: item.image }} style={styles.wImg} />
                                     <Text style={styles.name}>Tên xe: {item.name}</Text>
-                                    {/* <Text style={styles.model}>Mẫu xe: {item.model}</Text> */}
                                     <Text style={styles.price}>${item.price} VND</Text>
                                 </View>
                             ))}
@@ -114,7 +128,7 @@ const styles = StyleSheet.create({
     lineType: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginTop:50
+        marginTop: 50
     },
     btnType: {
         padding: 10,
