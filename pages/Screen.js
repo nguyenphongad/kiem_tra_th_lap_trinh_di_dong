@@ -1,68 +1,70 @@
 import { Button, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Picker } from '@react-native-picker/picker';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBike, fetchBikes } from '../store/bikeSlice';
 
 const Screen = () => {
 
-    const [bikes, setBikes] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [name, setName] = useState('');
+    const [price, setPrice] = useState('');
+    const [image, setImage] = useState('');
+    const [type, setType] = useState('Roadbike');
 
-    const fetchBikes = async () => {
-        try {
-            const response = await fetch('https://67319d4c7aaf2a9aff113592.mockapi.io/bike');
-            const data = await response.json();
-            setBikes(data);
-        } catch (error) {
-            console.error("Error fetching bikes:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const dispatch = useDispatch();
+    const { bikes, loading } = useSelector((state) => state.bike);
 
     useEffect(() => {
-        fetchBikes();
-    }, []);
+        dispatch(fetchBikes());
+    }, [dispatch]);
 
-
+    const handleAddBike = () => {
+        const newBike = { name, price, image, type };
+        dispatch(addBike(newBike));
+        setName('');
+        setPrice('');
+        setImage('');
+        setType('Roadbike');
+    };
 
     return (
-        <View>
+        <ScrollView>
             <Text style={{ fontSize: 20, fontWeight: "600", color: "red", marginBottom: 20 }}>THE WORLD BEST BIKE</Text>
 
             <View>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter bike name"
-                    // value={name}
-                    // onChangeText={setName}
+                    value={name}
+                    onChangeText={setName}
                 />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Enter bike price"
-                    // value={price}
-                    // onChangeText={setPrice}
+                    value={price}
+                    onChangeText={setPrice}
                     keyboardType="numeric"
                 />
 
                 <TextInput
                     style={styles.input}
                     placeholder="Enter bike image URL"
-                    // value={image}
-                    // onChangeText={setImage}
+                    value={image}
+                    onChangeText={setImage}
                 />
 
                 <Picker
-                    // selectedValue={type}
+                    selectedValue={type}
                     style={styles.picker}
-                    // onValueChange={(itemValue) => setType(itemValue)}
+                    onValueChange={(itemValue) => setType(itemValue)}
                 >
                     <Picker.Item label="Roadbike" value="Roadbike" />
                     <Picker.Item label="Mountain" value="Mountain" />
                     <Picker.Item label="Electric" value="Electric" />
                 </Picker>
 
-                <Button title="Add Bike" />
+                <Button title="Add Bike" onPress={handleAddBike} />
             </View>
 
 
@@ -102,7 +104,7 @@ const Screen = () => {
                 </View>
 
             </View>
-        </View>
+        </ScrollView>
     )
 }
 

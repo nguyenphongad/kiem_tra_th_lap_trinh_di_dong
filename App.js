@@ -7,10 +7,10 @@ import store from './store/store';
 export default function App() {
   return (
     <Provider store={store}>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <Screen />
         <StatusBar style="auto" />
-      </ScrollView >
+      </View >
     </Provider>
   );
 }
